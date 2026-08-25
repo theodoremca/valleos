@@ -1,0 +1,313 @@
+@import "tailwindcss";
+
+/* ============================================================
+   ValleOS — design tokens
+   The accent palette is not decorative: it is the product's
+   state vocabulary (go / caution / reject / stale / proposed / AI).
+   ============================================================ */
+
+@theme {
+  --font-sans: var(--font-barlow), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Ink — text and dark surfaces */
+  --color-ink: #0c141f;
+  --color-ink-70: #3b4857;
+  --color-ink-55: #5d6a7a;
+  --color-ink-40: #8a95a3;
+  --color-ink-25: #b6bdc6;
+
+  --color-night: #080d14;
+  --color-night-2: #0e1620;
+  --color-night-3: #172230;
+  --color-night-4: #22303f;
+
+  /* Paper — warm neutrals */
+  --color-paper: #ffffff;
+  --color-bone: #f4f2ee;
+  --color-bone-2: #eae7e0;
+  --color-line: #e3dfd8;
+  --color-line-2: #efece6;
+
+  /* Verdict + state palette (mirrors the product) */
+  --color-go: #0b7a45;
+  --color-go-deep: #075c33;
+  --color-go-lite: #e6f2ea;
+  --color-go-glow: #35d382;
+
+  --color-caution: #a96b08;
+  --color-caution-lite: #fbf0da;
+  --color-caution-glow: #e8b24a;
+
+  --color-reject: #b33227;
+  --color-reject-lite: #fbe5e2;
+  --color-reject-glow: #f0705f;
+
+  --color-ai: #0e6e7a;
+  --color-ai-lite: #dcf0f2;
+  --color-ai-glow: #4fd3df;
+
+  --color-stale: #64748b;
+  --color-stale-lite: #e9edf2;
+  --color-proposed: #6d4fc2;
+  --color-proposed-lite: #ede7fa;
+  --color-manual: #9a5b1c;
+  --color-manual-lite: #f7e7d6;
+
+  --radius-card: 14px;
+  --radius-lg: 20px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv05" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-go);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   Typography primitives
+   ============================================================ */
+
+.t-display {
+  font-weight: 600;
+  letter-spacing: -0.038em;
+  line-height: 0.9;
+  text-wrap: balance;
+}
+
+.t-head {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.t-sub {
+  font-weight: 400;
+  letter-spacing: -0.011em;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+/* Small caps-ish operational label — used for eyebrows and data labels */
+.t-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.t-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+
+.shell {
+  width: 100%;
+  max-width: 1416px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (min-width: 768px) {
+  .shell { padding-inline: 40px; }
+}
+
+@media (min-width: 1280px) {
+  .shell { padding-inline: 56px; }
+}
+
+.shell-wide {
+  width: 100%;
+  max-width: 1680px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (min-width: 768px) {
+  .shell-wide { padding-inline: 40px; }
+}
+
+/* Hairline rules that read as engineering drawing, not decoration */
+.rule {
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* ============================================================
+   Motion — reveal on scroll
+   ============================================================ */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 0.75s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+[data-reveal="scale"] {
+  transform: translate3d(0, 26px, 0) scale(0.985);
+}
+
+[data-reveal="left"] {
+  transform: translate3d(-22px, 0, 0);
+}
+
+[data-reveal="right"] {
+  transform: translate3d(22px, 0, 0);
+}
+
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes vo-rise {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes vo-card {
+  from { opacity: 0; transform: translate3d(0, 22px, 0) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes vo-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -7px, 0); }
+}
+
+@keyframes vo-pulse-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-go-glow) 55%, transparent); }
+  70% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-go-glow) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-go-glow) 0%, transparent); }
+}
+
+.anim-rise {
+  animation: vo-rise 1s var(--ease-out-expo) both;
+}
+
+.anim-card {
+  animation: vo-card 0.95s var(--ease-out-expo) both;
+}
+
+.anim-float {
+  animation: vo-float 7s ease-in-out infinite;
+}
+
+.anim-ring {
+  animation: vo-pulse-ring 2.6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .anim-rise,
+  .anim-card,
+  .anim-float,
+  .anim-ring {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   Product-UI surfaces (used by the interface fragments)
+   ============================================================ */
+
+.card-ui {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  box-shadow:
+    0 1px 2px rgb(12 20 31 / 0.04),
+    0 8px 24px -12px rgb(12 20 31 / 0.14);
+}
+
+.card-float {
+  background: #fdfdfc;
+  border: 1px solid rgb(255 255 255 / 0.85);
+  border-radius: var(--radius-card);
+  box-shadow:
+    0 2px 6px rgb(12 20 31 / 0.06),
+    0 22px 50px -20px rgb(12 20 31 / 0.35);
+}
+
+.card-night {
+  background: var(--color-night-2);
+  border: 1px solid rgb(255 255 255 / 0.09);
+  border-radius: var(--radius-card);
+}
+
+/* Hatched fill — the product uses this for stale / unknown data */
+.hatch-stale {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--color-stale) 20%, transparent) 0 2px,
+    transparent 2px 6px
+  );
+}
+
+/* Scroll rail for the horizontal lifecycle on small screens */
+.rail {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.rail::-webkit-scrollbar { display: none; }
+
+@keyframes vo-underline {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.anim-underline {
+  transform-origin: left;
+  animation: vo-underline 0.9s var(--ease-out-expo) 0.5s both;
+}
